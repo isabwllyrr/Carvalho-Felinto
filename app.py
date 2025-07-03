@@ -3,7 +3,8 @@ import pandas as pd
 import plotly.express as px
 
 # Carrega os dados
-df = pd.read_csv("solicitacoes_pda_powerbi.csv")
+df = pd.read_csv("solicitacoes_pda_consolidadas.csv")
+
 
 # Adicionando logo
 st.markdown(
