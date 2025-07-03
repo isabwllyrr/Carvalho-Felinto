@@ -83,11 +83,11 @@ with tab2:
                   color_discrete_sequence=["#636EFA"])
     st.plotly_chart(fig2, use_container_width=True)
 
-    st.subheader("🍩 Participação percentual Top 5 por Cidade")
-    grafico_cidade_top5 = top_n_com_others(
-        df_filtrado, "Cidade", "Solicitações", n=5)
+    st.subheader("🍩 Participação percentual por Cidade")
+    grafico_cidade_top4 = top_n_com_others(
+        df_filtrado, "Cidade", "Solicitações", n=4)
     fig_donut_cidade = px.pie(
-        grafico_cidade_top5,
+        grafico_cidade_top4,
         values='Solicitações',
         names='Cidade',
         hole=0.5,
