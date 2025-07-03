@@ -49,16 +49,27 @@ with tab1:
                   color_discrete_sequence=["#636EFA"])
     st.plotly_chart(fig1, use_container_width=True)
 
+    st.subheader("🍩 Participação percentual por PDA")
+    fig_donut = px.pie(grafico_pda, values='Solicitações', names='PDA', hole=0.5,
+                       color_discrete_sequence=px.colors.qualitative.Pastel)
+    st.plotly_chart(fig_donut, use_container_width=True)
+
 
 with tab2:
-    st.subheader("🏙️ Total de Solicitações por Cidade")
-    grafico_cidade = df_filtrado.groupby("Cidade", as_index=False)[
-        "Solicitações"].sum()
-    grafico_cidade = grafico_cidade.sort_values(
-        "Solicitações", ascending=False)
-    fig2 = px.bar(grafico_cidade, x="Cidade", y="Solicitações",
-                  color_discrete_sequence=["#636EFA"])
-    st.plotly_chart(fig2, use_container_width=True)
+    with tab2:
+        st.subheader("🏙️ Total de Solicitações por Cidade")
+        grafico_cidade = df_filtrado.groupby("Cidade", as_index=False)[
+            "Solicitações"].sum()
+        grafico_cidade = grafico_cidade.sort_values(
+            "Solicitações", ascending=False)
+        fig2 = px.bar(grafico_cidade, x="Cidade", y="Solicitações",
+                      color_discrete_sequence=["#636EFA"])
+        st.plotly_chart(fig2, use_container_width=True)
+
+        st.subheader("🍩 Participação percentual por Cidade")
+        fig_donut_cidade = px.pie(grafico_cidade, values='Solicitações', names='Cidade', hole=0.5,
+                                  color_discrete_sequence=px.colors.qualitative.Safe)
+        st.plotly_chart(fig_donut_cidade, use_container_width=True)
 
 with tab3:
     st.subheader("📋 Tabela de Dados Filtrados")
