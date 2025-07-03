@@ -84,16 +84,16 @@ with tab2:
     st.plotly_chart(fig2, use_container_width=True)
 
     st.subheader("🍩 Participação percentual Top 5 por Cidade")
-    grafico_pda_top5 = top_n_com_others(
-        df_filtrado, "PDA", "Cidade", n=5)
-    fig_donut = px.pie(
-        grafico_pda_top5,
-        values='Cidade',
-        names='PDA',
+    grafico_cidade_top5 = top_n_com_others(
+        df_filtrado, "Cidade", "Solicitações", n=5)
+    fig_donut_cidade = px.pie(
+        grafico_cidade_top5,
+        values='Solicitações',
+        names='Cidade',
         hole=0.5,
         color_discrete_sequence=px.colors.qualitative.Pastel
     )
-    st.plotly_chart(fig_donut, use_container_width=True)
+    st.plotly_chart(fig_donut_cidade, use_container_width=True)
 
 with tab3:
     st.subheader("📋 Tabela de Dados Filtrados")
