@@ -5,6 +5,26 @@ import plotly.express as px
 # Carrega os dados
 df = pd.read_csv("solicitacoes_pda_consolidadas.csv")
 
+# Função para top n + "Outros"
+
+
+def top_n_com_others(df, coluna, valor, n=5):
+    # Agrupa e ordena
+    df_agg = df.groupby(coluna, as_index=False)[valor].sum()
+    df_agg = df_agg.sort_values(valor, ascending=False)
+
+    # Seleciona top n
+    top_n = df_agg.head(n)
+    outros = df_agg.iloc[n:]
+
+    # Soma o resto como "Outros"
+    outros_sum = outros[valor].sum()
+
+    # Cria novo dataframe incluindo "Outros"
+    df_final = pd.concat([top_n, pd.DataFrame(
+        {coluna: ['Outros'], valor: [outros_sum]})], ignore_index=True)
+    return df_final
+
 
 # Adicionando logo
 st.markdown(
@@ -18,14 +38,6 @@ st.markdown(
 
 # Título
 st.title("📊 Painel Interativo - Solicitações de PDAs por Cidade e Área")
-
-# Kpis
-col1, col2, col3, col4 = st.columns([1.5, 2, 2, 2])
-
-col1.metric("📊 Total de Solicitações", 237)
-col2.metric("🏙️ Cidade destaque", "Patos")
-col3.metric("📌 PDA mais solicitado", "Engenharia")
-col4.metric("📈 Média por cidade", "59.2")
 
 # Filtros
 cidades = st.multiselect("Filtrar por cidade:",
@@ -49,27 +61,27 @@ with tab1:
                   color_discrete_sequence=["#636EFA"])
     st.plotly_chart(fig1, use_container_width=True)
 
-    st.subheader("🍩 Participação percentual por PDA")
-    fig_donut = px.pie(grafico_pda, values='Solicitações', names='PDA', hole=0.5,
-                       color_discrete_sequence=px.colors.qualitative.Pastel)
+    st.subheader("🍩 Participação percentual Top 5 por PDA")
+    grafico_pda_top5 = top_n_com_others(
+        df_filtrado, "PDA", "Solicitações", n=5)
+    fig_donut = px.pie(
+        grafico_pda_top5,
+        values='Solicitações',
+        names='PDA',
+        hole=0.5,
+        color_discrete_sequence=px.colors.qualitative.Pastel
+    )
     st.plotly_chart(fig_donut, use_container_width=True)
 
-
 with tab2:
-    with tab2:
-        st.subheader("🏙️ Total de Solicitações por Cidade")
-        grafico_cidade = df_filtrado.groupby("Cidade", as_index=False)[
-            "Solicitações"].sum()
-        grafico_cidade = grafico_cidade.sort_values(
-            "Solicitações", ascending=False)
-        fig2 = px.bar(grafico_cidade, x="Cidade", y="Solicitações",
-                      color_discrete_sequence=["#636EFA"])
-        st.plotly_chart(fig2, use_container_width=True)
-
-        st.subheader("🍩 Participação percentual por Cidade")
-        fig_donut_cidade = px.pie(grafico_cidade, values='Solicitações', names='Cidade', hole=0.5,
-                                  color_discrete_sequence=px.colors.qualitative.Safe)
-        st.plotly_chart(fig_donut_cidade, use_container_width=True)
+    st.subheader("🏙️ Total de Solicitações por Cidade")
+    grafico_cidade = df_filtrado.groupby("Cidade", as_index=False)[
+        "Solicitações"].sum()
+    grafico_cidade = grafico_cidade.sort_values(
+        "Solicitações", ascending=False)
+    fig2 = px.bar(grafico_cidade, x="Cidade", y="Solicitações",
+                  color_discrete_sequence=["#636EFA"])
+    st.plotly_chart(fig2, use_container_width=True)
 
 with tab3:
     st.subheader("📋 Tabela de Dados Filtrados")
