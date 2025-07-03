@@ -83,6 +83,18 @@ with tab2:
                   color_discrete_sequence=["#636EFA"])
     st.plotly_chart(fig2, use_container_width=True)
 
+    st.subheader("🍩 Participação percentual Top 5 por Cidade")
+    grafico_pda_top5 = top_n_com_others(
+        df_filtrado, "PDA", "Cidade", n=5)
+    fig_donut = px.pie(
+        grafico_pda_top5,
+        values='Cidade',
+        names='PDA',
+        hole=0.5,
+        color_discrete_sequence=px.colors.qualitative.Pastel
+    )
+    st.plotly_chart(fig_donut, use_container_width=True)
+
 with tab3:
     st.subheader("📋 Tabela de Dados Filtrados")
     st.dataframe(df_filtrado, use_container_width=True)
