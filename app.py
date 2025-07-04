@@ -113,48 +113,52 @@ with tab3:
 # --- PROBLEMAS MANUAIS POR CIDADE/PDA ---
 problemas = [
     {"Cidade": "Patos", "PDA": "Gestão de Pessoas",
-        "Problema": "Efetivo escasso, insatisfação com salários, falta de motivação, ausência de capacitação"},
+        "Problema": "Efetivo escasso, insatisfação com salários, falta de motivação, ausência de capacitação, criação de ajuda de custo, treinamento com material bélico, dificuldade em atender as diversas modalidades de policiamento, limpeza e água para consumo dos policiais"},
     {"Cidade": "Patos", "PDA": "Engenharia",
-        "Problema": "Alojamento precário, sede sem estrutura, infiltrações, instalações elétricas ruins, sem espaço para práticas esportivas"},
+        "Problema": "Alojamento precário, sede sem estrutura, infiltrações, instalações elétricas ruins, sem espaço para práticas esportivas, construção de pátios para depósitos de veículos, manutenção de material, pavimentação, criação de secretaria"},
     {"Cidade": "Patos", "PDA": "Tecnologia da Informação",
-        "Problema": "Necessidade de novos computadores e impressoras, novos recursos tecnológicos para maximizar a produtividade"},
+        "Problema": "Necessidade de novos computadores, impressoras novas, novos recursos tecnológicos para maximizar a produtividade"},
     {"Cidade": "Patos", "PDA": "Saúde",
         "Problema": "Ampliação dos serviços de saúde para o PM e sua família, serviço de acolhimento psicoterapêutico"},
     {"Cidade": "Patos", "PDA": "Materiais e Patrimônio",
-        "Problema": "Falta de mobiliário adequado e manutenção predial"},
+        "Problema": "Falta de mobiliário adequado, viaturas com xadrez. ar-condicionado, motocicletas para mobilidade nas fiscalizações"},
 
     {"Cidade": "Campina Grande", "PDA": "Gestão de Pessoas",
-        "Problema": "Baixo salário, sobrecarga de trabalho, idade avançada dos efetivos"},
+        "Problema": "insatisfação com salários, efetivo escasso, grande demanda de serviços, investir em planos de carreira, idade avançada dos efetivos, treinamento com material bélico, permitir que os PM´s formados em direito assessorem os militares que respondem judicialmente, terceirizar serviço de limpeza, implementar formação contínua para os soldados, verba para custeio de despesas mensais recorrentes"},
     {"Cidade": "Campina Grande", "PDA": "Engenharia",
-        "Problema": "Necessidade de construção de unidade, infiltrações, manutenção predial"},
+        "Problema": "sede sem estrutura, construção de uma nova unidade que comporte a força tática, calçamento e asfaltamento dos estacionamentos, infiltrações, falta de reboque para condução de veículos apreendidos, coletes com apetrechos pagos pelo estado, sem espaço para atividades físicas, criação de um canil"},
     {"Cidade": "Campina Grande", "PDA": "Tecnologia da Informação",
-        "Problema": "Equipamentos obsoletos e falta de TI"},
+        "Problema": "Necessidade de novos computadores, dados migrados incompletos"},
     {"Cidade": "Campina Grande", "PDA": "Saúde",
         "Problema": "Falta de estrutura adequada para atendimento médico"},
     {"Cidade": "Campina Grande", "PDA": "Materiais e Patrimônio",
-        "Problema": "Defasagem no controle de patrimônio e estoque"},
+        "Problema": "viaturas com xadrez, falta de utensílios eletrodométiscos, kit de aquisição APH, novos móveis, caminhão prancha"},
 
     {"Cidade": "João Pessoa", "PDA": "Gestão de Pessoas",
-        "Problema": "Déficit de efetivo, redistribuição necessária, ausência de incentivo"},
+        "Problema": "Terceirizar serviços de limpeza, mais coordenadores da integração comunitária, ampliação da terceirização dos seviços gerais, ausência de capacitação, treinamento com material bélico, efetivo escasso, valorização de repressão afetando as prioridades da gestão, colocar os oficiais do CFO em comando, insuficiência de recursos extras, falta de motivação, plano de estruturação das mulheres, redistribuição dos oficiais de maneira estratégica"},
     {"Cidade": "João Pessoa", "PDA": "Engenharia",
-        "Problema": "Reformas urgentes, infiltrações, construção de alojamento e presídio"},
+        "Problema": "Construção do presídio militar, restauração dos muros dos batalhões, construção de um hospital da PM, construção de um colégio militar no sertão, infiltrações, paredes mofadas, alojamento precário, construção de mais salas, construção de coberturas para proteção de viatura, pinturas dos setores dos batalhões, reforma nos banheiros, construção de alojamentos femininos"},
     {"Cidade": "João Pessoa", "PDA": "Tecnologia da Informação",
-        "Problema": "Falta de suporte técnico e equipamentos desatualizados"},
+        "Problema": "Necessidade de novos computadores, computadores obsoletos, impressoras novas"},
     {"Cidade": "João Pessoa", "PDA": "Processos e Normas",
-        "Problema": "Necessidade de atualização e padronização de normas internas"},
+        "Problema": "Aplicação de rotinas de policiamento, projeto para regulamenação de carga horária, transparência no processo de planejamento das criações de batalhões"},
     {"Cidade": "João Pessoa", "PDA": "Materiais e Patrimônio",
-        "Problema": "Infraestrutura inadequada e controle patrimonial falho"},
+        "Problema": "Viaturas com xadrez, blindagem das viaturas, investir em pneus que não estourem, viaturas focadas em áreas rurais, novos móveis"},
 
     {"Cidade": "Guarabira", "PDA": "Gestão de Pessoas",
-        "Problema": "Falta de efetivo, ausência de plano de carreira e motivação baixa"},
+        "Problema": "Efetivo escasso, preparação de programa que vise orientar e preparar psicologicamente o militar que está indo para reserva, oficiais de curso não tem garantia de atingir a plenitude, treinamento com material bélico"},
     {"Cidade": "Guarabira", "PDA": "Engenharia",
-        "Problema": "Falta de manutenção predial, infiltrações, sede com problemas estruturais"},
+        "Problema": "Sem espaço para atividades físicas, sede sem estrutura, construção de stand de tiro, construção de alojamentos femininos, contratação do serviço de manutenção diária, alojamento precário"},
     {"Cidade": "Guarabira", "PDA": "Tecnologia da Informação",
-        "Problema": "Carência de computadores e rede instável"},
+        "Problema": "Aquisição de armazenamento em nuvem, necessidade de novos computadores, sistema integrado de informações, sistema de armaria eletrônico"},
     {"Cidade": "Guarabira", "PDA": "Processos e Normas",
-        "Problema": "Desorganização documental e ausência de fluxos claros"},
+        "Problema": "Avaço no arcabouço legislativo, reformulação no processo gerencial e decisório, melhorar a definição de atribuição dos oficiais, ampliar o setor de manutenção, implementar uma operação em conjunto com outros órgãos operativos"},
     {"Cidade": "Guarabira", "PDA": "Materiais e Patrimônio",
-        "Problema": "Móveis deteriorados, controle ineficaz de estoque"},
+        "Problema": "Novos móveis, aquisição de materiais para o setor administrativo, viaturas com xadrez, solicitação de datashow, tela de projeção, caixa de som acústica, microfone sem fio"},
+    {"Cidade": "Guarabira", "PDA": "Saúde",
+        "Problema": "Plano de saúde que seja atendido em todo o Estado"},
+    {"Cidade": "Guarabira", "PDA": "Material Bélico",
+        "Problema": "Necessidade de mais munição dos cal"}
 ]
 
 df_problemas = pd.DataFrame(problemas)
@@ -163,29 +167,38 @@ df_problemas = pd.DataFrame(problemas)
 with tab4:
     st.subheader("🧭 Problemas por Cidade e Área")
 
-    with st.container(border=True):
-        st.markdown("### 🎯 Filtros")
-        cidades_prob = st.multiselect("Selecione a cidade:", df_problemas["Cidade"].unique(
-        ), default=df_problemas["Cidade"].unique())
-        pdas_prob = st.multiselect("Selecione a área temática (PDA):", df_problemas["PDA"].unique(
-        ), default=df_problemas["PDA"].unique())
+    cidades_unicas = df_problemas["Cidade"].unique()
 
-        df_prob_filtrado = df_problemas[df_problemas["Cidade"].isin(
-            cidades_prob) & df_problemas["PDA"].isin(pdas_prob)]
+    for cidade in cidades_unicas:
+        st.markdown(f"### 📍 {cidade}")
+        df_cidade = df_problemas[df_problemas["Cidade"] == cidade]
 
-    with st.container(border=True):
-        st.markdown("### 📋 Tabela de Problemas")
-        st.data_editor(df_prob_filtrado, use_container_width=True,
-                       disabled=True, height=400)
+        for _, linha in df_cidade.iterrows():
+            st.markdown(f"""
+            <div style="background-color:#f0f2f6; padding: 12px; border-radius: 10px; margin-bottom:10px;">
+                <strong>🗂️ {linha['PDA']}</strong><br>
+                {linha['Problema']}
+            </div>
+            """, unsafe_allow_html=True)
+
 
 # --- ABA 5: Problemas Mais Recorrentes ---
 with tab5:
     st.subheader("📌 Problemas Mais Recorrentes")
+
+    # Divide os problemas em frases separadas
     todas = df_problemas["Problema"].str.lower().str.split(", ")
-    plano = pd.Series([item for sublist in todas for item in sublist])
+    plano = pd.Series([item.strip() for sublist in todas for item in sublist])
     top = plano.value_counts().reset_index()
     top.columns = ["Problema recorrente", "Ocorrências"]
-    st.dataframe(top, use_container_width=True)
+
+    for _, row in top.iterrows():
+        st.markdown(f"""
+        <div style="background-color:#e6f7ff; padding: 10px; border-left: 6px solid #1890ff; margin-bottom:8px; border-radius:5px">
+            <strong>🔹 {row['Problema recorrente'].capitalize()}</strong><br>
+            Ocorrências: {row['Ocorrências']}
+        </div>
+        """, unsafe_allow_html=True)
 
 # --- ABA 6: Download CSV filtrado ---
 with tab6:
