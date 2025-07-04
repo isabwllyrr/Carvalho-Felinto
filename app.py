@@ -52,13 +52,13 @@ df_coords = pd.DataFrame(coordenadas)
 # Merge das coordenadas no dataframe filtrado
 df_filtrado = df_filtrado.merge(df_coords, on='Cidade', how='left')
 
-# Aba
+# Abas de navegação
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "📊 Gráfico por PDA",
     "🏙️ Gráfico por Cidade",
     "📌 Problemas Mais Recorrentes",
-    "🗺️ Mapa das Solicitações",
-    "📥 Download"
+    "🗘️ Mapa das Solicitações",
+    "📅 Download"
 ])
 
 # --- ABA 1: Gráfico por PDA ---
@@ -103,106 +103,51 @@ with tab2:
     )
     st.plotly_chart(fig_donut_cidade, use_container_width=True)
 
-# --- PROBLEMAS MANUAIS POR CIDADE/PDA ---
-problemas = [
-    {"Cidade": "Patos", "PDA": "Gestão de Pessoas",
-        "Problema": "Efetivo escasso, insatisfação com salários, falta de motivação, ausência de capacitação, criação de ajuda de custo, treinamento com material bélico, dificuldade em atender as diversas modalidades de policiamento, limpeza e água para consumo dos policiais"},
-    {"Cidade": "Patos", "PDA": "Engenharia",
-        "Problema": "Alojamento precário, sede sem estrutura, infiltrações, instalações elétricas ruins, sem espaço para práticas esportivas, construção de pátios para depósitos de veículos, manutenção de material, pavimentação, criação de secretaria"},
-    {"Cidade": "Patos", "PDA": "Tecnologia da Informação",
-        "Problema": "Necessidade de novos computadores, impressoras novas, novos recursos tecnológicos para maximizar a produtividade"},
-    {"Cidade": "Patos", "PDA": "Saúde",
-        "Problema": "Ampliação dos serviços de saúde para o PM e sua família, serviço de acolhimento psicoterapêutico"},
-    {"Cidade": "Patos", "PDA": "Materiais e Patrimônio",
-        "Problema": "Falta de mobiliário adequado, viaturas com xadrez. ar-condicionado, motocicletas para mobilidade nas fiscalizações"},
-
-    {"Cidade": "Campina Grande", "PDA": "Gestão de Pessoas",
-        "Problema": "insatisfação com salários, efetivo escasso, grande demanda de serviços, investir em planos de carreira, idade avançada dos efetivos, treinamento com material bélico, permitir que os PM´s formados em direito assessorem os militares que respondem judicialmente, terceirizar serviço de limpeza, implementar formação contínua para os soldados, verba para custeio de despesas mensais recorrentes"},
-    {"Cidade": "Campina Grande", "PDA": "Engenharia",
-        "Problema": "sede sem estrutura, construção de uma nova unidade que comporte a força tática, calçamento e asfaltamento dos estacionamentos, infiltrações, falta de reboque para condução de veículos apreendidos, coletes com apetrechos pagos pelo estado, sem espaço para atividades físicas, criação de um canil"},
-    {"Cidade": "Campina Grande", "PDA": "Tecnologia da Informação",
-        "Problema": "Necessidade de novos computadores, dados migrados incompletos"},
-    {"Cidade": "Campina Grande", "PDA": "Saúde",
-        "Problema": "Falta de estrutura adequada para atendimento médico"},
-    {"Cidade": "Campina Grande", "PDA": "Materiais e Patrimônio",
-        "Problema": "viaturas com xadrez, falta de utensílios eletrodométiscos, kit de aquisição APH, novos móveis, caminhão prancha"},
-
-    {"Cidade": "João Pessoa", "PDA": "Gestão de Pessoas",
-        "Problema": "Terceirizar serviços de limpeza, mais coordenadores da integração comunitária, ampliação da terceirização dos seviços gerais, ausência de capacitação, treinamento com material bélico, efetivo escasso, valorização de repressão afetando as prioridades da gestão, colocar os oficiais do CFO em comando, insuficiência de recursos extras, falta de motivação, plano de estruturação das mulheres, redistribuição dos oficiais de maneira estratégica"},
-    {"Cidade": "João Pessoa", "PDA": "Engenharia",
-        "Problema": "Construção do presídio militar, restauração dos muros dos batalhões, construção de um hospital da PM, construção de um colégio militar no sertão, infiltrações, paredes mofadas, alojamento precário, construção de mais salas, construção de coberturas para proteção de viatura, pinturas dos setores dos batalhões, reforma nos banheiros, construção de alojamentos femininos"},
-    {"Cidade": "João Pessoa", "PDA": "Tecnologia da Informação",
-        "Problema": "Necessidade de novos computadores, computadores obsoletos, impressoras novas"},
-    {"Cidade": "João Pessoa", "PDA": "Processos e Normas",
-        "Problema": "Aplicação de rotinas de policiamento, projeto para regulamenação de carga horária, transparência no processo de planejamento das criações de batalhões"},
-    {"Cidade": "João Pessoa", "PDA": "Materiais e Patrimônio",
-        "Problema": "Viaturas com xadrez, blindagem das viaturas, investir em pneus que não estourem, viaturas focadas em áreas rurais, novos móveis"},
-
-    {"Cidade": "Guarabira", "PDA": "Gestão de Pessoas",
-        "Problema": "Efetivo escasso, preparação de programa que vise orientar e preparar psicologicamente o militar que está indo para reserva, oficiais de curso não tem garantia de atingir a plenitude, treinamento com material bélico"},
-    {"Cidade": "Guarabira", "PDA": "Engenharia",
-        "Problema": "Sem espaço para atividades físicas, sede sem estrutura, construção de stand de tiro, construção de alojamentos femininos, contratação do serviço de manutenção diária, alojamento precário"},
-    {"Cidade": "Guarabira", "PDA": "Tecnologia da Informação",
-        "Problema": "Aquisição de armazenamento em nuvem, necessidade de novos computadores, sistema integrado de informações, sistema de armaria eletrônico"},
-    {"Cidade": "Guarabira", "PDA": "Processos e Normas",
-        "Problema": "Avaço no arcabouço legislativo, reformulação no processo gerencial e decisório, melhorar a definição de atribuição dos oficiais, ampliar o setor de manutenção, implementar uma operação em conjunto com outros órgãos operativos"},
-    {"Cidade": "Guarabira", "PDA": "Materiais e Patrimônio",
-        "Problema": "Novos móveis, aquisição de materiais para o setor administrativo, viaturas com xadrez, solicitação de datashow, tela de projeção, caixa de som acústica, microfone sem fio"},
-    {"Cidade": "Guarabira", "PDA": "Saúde",
-        "Problema": "Plano de saúde que seja atendido em todo o Estado"},
-    {"Cidade": "Guarabira", "PDA": "Material Bélico",
-        "Problema": "Necessidade de mais munição dos cal"}
-]
-
-df_problemas = pd.DataFrame(problemas)
-
-# --- ABA 3: Problemas Mais Recorrentes ---
+# --- ABA 3: Problemas Mais Recorrentes (com 2 gráficos) ---
 with tab3:
     st.subheader("📌 Problemas Mais Recorrentes (Top 10)")
 
-    # Extrai os 10 problemas mais frequentes
-    todas = df_problemas["Problema"].str.lower().str.split(", ")
-    plano = pd.Series([item.strip() for sublist in todas for item in sublist])
-    top = plano.value_counts().reset_index().head(10)
-    top.columns = ["Problema recorrente", "Ocorrências"]
+    # Top 10 problemas identificados manualmente
+    problemas_top10 = [
+        {"Problema": "Baixo efetivo", "Ocorrências": 35},
+        {"Problema": "Infraestrutura precária", "Ocorrências": 30},
+        {"Problema": "Salário insatisfatório", "Ocorrências": 10},
+        {"Problema": "Tecnologia obsoleta", "Ocorrências": 9},
+        {"Problema": "Falta de capacitação", "Ocorrências": 8},
+        {"Problema": "Falta de viaturas", "Ocorrências": 6},
+        {"Problema": "Mobiliário danificado", "Ocorrências": 6},
+        {"Problema": "Infiltrações e goteiras", "Ocorrências": 5},
+        {"Problema": "Falta de espaço físico", "Ocorrências": 4},
+        {"Problema": "Falta de padronização", "Ocorrências": 4},
+    ]
 
-    # Gráfico de barras horizontais com estilo limpo
+    df_top10 = pd.DataFrame(problemas_top10)
+
+    # Gráfico de barras
     fig_top10 = px.bar(
-        top,
+        df_top10,
         x="Ocorrências",
-        y="Problema recorrente",
+        y="Problema",
         orientation='h',
-        color_discrete_sequence=["#636EFA"]
+        color_discrete_sequence=["#EF553B"]
     )
-
-    fig_top10.update_layout(
-        xaxis_title="",  # Sem título no eixo X
-        yaxis_title="",  # Sem título no eixo Y
-        showlegend=False,
-        height=600,
-        margin=dict(l=20, r=20, t=30, b=20),
-        plot_bgcolor='rgba(0,0,0,0)',
-        paper_bgcolor='rgba(0,0,0,0)',
-        font=dict(size=14)
-    )
-
-    fig_top10.update_traces(
-        text=None,
-        marker_line_width=1.5,
-        marker_line_color='white'
-    )
-
     st.plotly_chart(fig_top10, use_container_width=True)
 
-# --- ABA 5: Download CSV filtrado ---
-with tab5:
-    st.subheader("📥 Baixar os dados filtrados")
-    csv = df_filtrado.to_csv(index=False).encode('utf-8')
-    st.download_button("📥 Clique para baixar", csv,
-                       "dados_filtrados.csv", "text/csv")
+    # Gráfico de pizza com os top 5
+    df_top5 = df_top10.head(5)
+    fig_pie = px.pie(
+        df_top5,
+        values="Ocorrências",
+        names="Problema",
+        title="Top 5 Problemas - Participação",
+        hole=0.4,
+        color_discrete_sequence=px.colors.qualitative.Set3
+    )
+    st.plotly_chart(fig_pie, use_container_width=True)
 
+# --- ABA 4: Mapa ---
 with tab4:
-    st.subheader("🗺️ Mapa das Solicitações por Cidade")
+    st.subheader("🗘️ Mapa das Solicitações por Cidade")
 
     dados_mapa = df_filtrado.groupby(
         ["Cidade", "Latitude", "Longitude"], as_index=False)["Solicitações"].sum()
@@ -224,3 +169,10 @@ with tab4:
     fig_mapa.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
 
     st.plotly_chart(fig_mapa, use_container_width=True)
+
+# --- ABA 5: Download CSV filtrado ---
+with tab5:
+    st.subheader("📅 Baixar os dados filtrados")
+    csv = df_filtrado.to_csv(index=False).encode('utf-8')
+    st.download_button("📅 Clique para baixar", csv,
+                       "dados_filtrados.csv", "text/csv")
