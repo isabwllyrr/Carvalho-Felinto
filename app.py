@@ -20,16 +20,14 @@ def top_n_com_others(df, coluna, valor, n=5):
 
 
 # Logo carvalho e felinto + PM
-col1, col2 = st.columns([1, 1])
+col1, col2 = st.columns(2)
 
 with col1:
-    st.image("2.png", width=200, output_format="PNG")
+    st.image("logo_esquerda.png", width=250)
 
 with col2:
-    st.image("PMPB.png", width=200, output_format="PNG")
+    st.image("logo_direita.png", width=250)
 
-
-# Título
 st.title("📊 Painel Interativo - Solicitações de PDAs por Cidade e Área")
 
 # Filtros
