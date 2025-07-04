@@ -167,20 +167,27 @@ df_problemas = pd.DataFrame(problemas)
 with tab4:
     st.subheader("🧭 Problemas por Cidade e Área")
 
+    # Agrupar por cidade e mostrar os PDAs como caixas separadas
     cidades_unicas = df_problemas["Cidade"].unique()
 
     for cidade in cidades_unicas:
-        st.markdown(f"### 📍 {cidade}")
+        st.markdown(f"## 📍 {cidade}")
+
         df_cidade = df_problemas[df_problemas["Cidade"] == cidade]
 
-        for _, linha in df_cidade.iterrows():
+        for _, row in df_cidade.iterrows():
             st.markdown(f"""
-            <div style="background-color:#f0f2f6; padding: 12px; border-radius: 10px; margin-bottom:10px;">
-                <strong>🗂️ {linha['PDA']}</strong><br>
-                {linha['Problema']}
-            </div>
+                <div style="
+                    background-color: #f9f9f9;
+                    padding: 16px;
+                    margin-bottom: 10px;
+                    border-radius: 10px;
+                    border-left: 6px solid #636EFA;
+                ">
+                    <h4 style="margin: 0; color: #333;">🔹 {row['PDA']}</h4>
+                    <p style="margin: 8px 0 0; color: #555;">{row['Problema']}</p>
+                </div>
             """, unsafe_allow_html=True)
-
 
 # --- ABA 5: Problemas Mais Recorrentes ---
 with tab5:
