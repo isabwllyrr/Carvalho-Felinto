@@ -19,15 +19,15 @@ def top_n_com_others(df, coluna, valor, n=5):
     return df_final
 
 
-# Logo (opcional)
-st.markdown(
-    """
-    <div style="text-align: center;">
-        <img src="Azul e Branco_.png" width="250">
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+# Logo carvalho e felinto + PM
+col1, col2 = st.columns([1, 1])
+
+with col1:
+    st.image("2.png", width=200, output_format="PNG")
+
+with col2:
+    st.image("PMPB.png", width=200, output_format="PNG")
+
 
 # Título
 st.title("📊 Painel Interativo - Solicitações de PDAs por Cidade e Área")
