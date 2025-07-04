@@ -184,21 +184,33 @@ with tab4:
 
 # --- ABA 5: Problemas Mais Recorrentes ---
 with tab5:
-    st.subheader("📌 Problemas Mais Recorrentes")
+    st.subheader("📌 Problemas Mais Recorrentes (Top 10)")
 
     # Divide os problemas em frases separadas
     todas = df_problemas["Problema"].str.lower().str.split(", ")
     plano = pd.Series([item.strip() for sublist in todas for item in sublist])
-    top = plano.value_counts().reset_index()
+    top = plano.value_counts().reset_index().head(10)
     top.columns = ["Problema recorrente", "Ocorrências"]
 
-    for _, row in top.iterrows():
-        st.markdown(f"""
-        <div style="background-color:#e6f7ff; padding: 10px; border-left: 6px solid #1890ff; margin-bottom:8px; border-radius:5px">
-            <strong>🔹 {row['Problema recorrente'].capitalize()}</strong><br>
-            Ocorrências: {row['Ocorrências']}
-        </div>
-        """, unsafe_allow_html=True)
+    # Gráfico de barras sem mostrar os números
+    fig_top10 = px.bar(
+        top,
+        x="Problema recorrente",
+        y="Ocorrências",
+        color_discrete_sequence=["#636EFA"],
+        text=None  # Não exibe os valores
+    )
+
+    fig_top10.update_layout(
+        xaxis_title="",
+        yaxis_title="",
+        showlegend=False,
+        xaxis_tickangle=45
+    )
+
+    fig_top10.update_traces(textposition="none")
+
+    st.plotly_chart(fig_top10, use_container_width=True)
 
 # --- ABA 6: Download CSV filtrado ---
 with tab6:
