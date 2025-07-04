@@ -94,9 +94,11 @@ with tab2:
         plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
     st.plotly_chart(fig_donut_cidade, use_container_width=True)
 
-# --- ABA 3 ---
+
+# --- ABA 3: Problemas Mais Recorrentes ---
 with tab3:
     st.subheader("📌 Problemas Mais Recorrentes (Top 10)")
+
     problemas_top10 = [
         {"Problema": "Baixo efetivo", "Ocorrências": 35},
         {"Problema": "Infraestrutura precária", "Ocorrências": 30},
@@ -109,20 +111,35 @@ with tab3:
         {"Problema": "Falta de espaço físico", "Ocorrências": 4},
         {"Problema": "Falta de padronização", "Ocorrências": 4},
     ]
+
     df_top10 = pd.DataFrame(problemas_top10)
-    fig_top10 = px.bar(df_top10, x="Ocorrências", y="Problema",
-                       orientation='h', color_discrete_sequence=["#555555"])
-    fig_top10.update_layout(plot_bgcolor='rgba(0,0,0,0)',
-                            paper_bgcolor='rgba(0,0,0,0)')
+
+    fig_top10 = px.bar(
+        df_top10,
+        x="Ocorrências",
+        y="Problema",
+        orientation='h',
+        color_discrete_sequence=["#1F4E79"],  # azul escuro neutro
+    )
+
+    fig_top10.update_layout(
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        xaxis_title=None,
+        yaxis_title=None,
+    )
+
     st.plotly_chart(fig_top10, use_container_width=True)
 
-    df_top5 = df_top10.head(5)
-    fig_pie = px.pie(df_top5, values="Ocorrências", names="Problema", hole=0.4,
-                     color_discrete_sequence=["#1F4E79", "#A0A0A0", "#7B8DAB", "#555555", "#B0BEC5"])
-    fig_pie.update_layout(plot_bgcolor='rgba(0,0,0,0)',
-                          paper_bgcolor='rgba(0,0,0,0)')
-    st.plotly_chart(fig_pie, use_container_width=True)
-
+    st.markdown("""
+    <div style='padding: 10px; background-color: #F5F5F5; border-radius: 10px; font-size: 16px'>
+        Os dados acima refletem os <b>principais problemas enfrentados pelas cidades</b> com base nas áreas temáticas priorizadas (PDAs).
+        <br><br>
+        <b>Baixo efetivo</b> e <b>infraestrutura precária</b> são, disparadamente, os problemas mais mencionados, representando juntos mais de 60% das ocorrências.
+        <br><br>
+        Esses indicadores podem auxiliar na <b>priorização de investimentos e políticas públicas</b> mais eficientes, voltadas para as reais demandas operacionais.
+    </div>
+    """, unsafe_allow_html=True)
 # --- ABA 4 ---
 with tab4:
     st.subheader("🗸️ Mapa das Solicitações por Cidade")
