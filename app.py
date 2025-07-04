@@ -14,8 +14,13 @@ def top_n_com_others(df, coluna, valor, n=5):
     top_n = df_agg.head(n)
     outros = df_agg.iloc[n:]
     outros_sum = outros[valor].sum()
-    df_final = pd.concat([top_n, pd.DataFrame(
-        {coluna: ['Outros'], valor: [outros_sum]})], ignore_index=True)
+
+    if outros_sum > 0:
+        df_final = pd.concat([top_n, pd.DataFrame(
+            {coluna: ['Outros'], valor: [outros_sum]})], ignore_index=True)
+    else:
+        df_final = top_n
+
     return df_final
 
 
