@@ -24,7 +24,7 @@ col1, col2 = st.columns(2)
 with col1:
     st.image("logo_esquerda_.png", width=200)
 with col2:
-    st.image("logo_direita_.png", width=200)
+    st.image("logo_direita_.png", width=150)
 
 st.title("📊 Painel Interativo - Solicitações de PDAs por Cidade e Área")
 
