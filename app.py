@@ -39,14 +39,28 @@ pdas = st.multiselect("Filtrar por área temática (PDA):",
 # Dados filtrados
 df_filtrado = df[df["Cidade"].isin(cidades) & df["PDA"].isin(pdas)]
 
+# Dicionário com as coordenadas das cidades
+coordenadas = {
+    'Cidade': ['Patos', 'Campina Grande', 'João Pessoa', 'Guarabira'],
+    'Latitude': [-7.0172, -7.2306, -7.1195, -6.8506],
+    'Longitude': [-37.2747, -35.8811, -34.8450, -35.4853]
+}
+
+# DataFrame com coordenadas
+df_coords = pd.DataFrame(coordenadas)
+
+# Merge das coordenadas no dataframe filtrado
+df_filtrado = df_filtrado.merge(df_coords, on='Cidade', how='left')
+
 # Aba
-tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
     "📊 Gráfico por PDA",
     "🏙️ Gráfico por Cidade",
     "📋 Dados Completos",
     "🧭 Problemas por Cidade e Área",
     "📌 Problemas Mais Recorrentes",
-    "📥 Download"
+    "📥 Download",
+    "🗺️ Mapa das Solicitações"
 ])
 
 # --- ABA 1: Gráfico por PDA ---
@@ -179,3 +193,30 @@ with tab6:
     csv = df_filtrado.to_csv(index=False).encode('utf-8')
     st.download_button("📥 Clique para baixar", csv,
                        "dados_filtrados.csv", "text/csv")
+
+st.subheader("🗺️ Mapa das Solicitações por Cidade")
+
+with tab7:
+    st.subheader("🗺️ Mapa das Solicitações por Cidade")
+
+    # Agrupa para evitar duplicados e soma solicitações
+    dados_mapa = df_filtrado.groupby(
+        ["Cidade", "Latitude", "Longitude"], as_index=False)["Solicitações"].sum()
+
+    fig_mapa = px.scatter_mapbox(
+        dados_mapa,
+        lat="Latitude",
+        lon="Longitude",
+        size="Solicitações",
+        hover_name="Cidade",
+        hover_data={"Solicitações": True,
+                    "Latitude": False, "Longitude": False},
+        zoom=6,
+        size_max=30,
+        color_discrete_sequence=["#636EFA"]
+    )
+
+    fig_mapa.update_layout(mapbox_style="open-street-map")
+    fig_mapa.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
+
+    st.plotly_chart(fig_mapa, use_container_width=True)
