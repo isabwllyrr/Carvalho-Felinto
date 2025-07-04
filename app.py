@@ -2,31 +2,24 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# Carrega os dados
+# Carrega os dados principais
 df = pd.read_csv("solicitacoes_pda_consolidadas.csv")
 
-# Função para top n + "Outros"
+# Função para Top N + "Outros"
 
 
 def top_n_com_others(df, coluna, valor, n=5):
-    # Agrupa e ordena
-    df_agg = df.groupby(coluna, as_index=False)[valor].sum()
-    df_agg = df_agg.sort_values(valor, ascending=False)
-
-    # Seleciona top n
+    df_agg = df.groupby(coluna, as_index=False)[
+        valor].sum().sort_values(valor, ascending=False)
     top_n = df_agg.head(n)
     outros = df_agg.iloc[n:]
-
-    # Soma o resto como "Outros"
     outros_sum = outros[valor].sum()
-
-    # Cria novo dataframe incluindo "Outros"
     df_final = pd.concat([top_n, pd.DataFrame(
         {coluna: ['Outros'], valor: [outros_sum]})], ignore_index=True)
     return df_final
 
 
-# Adicionando logo
+# Logo (opcional)
 st.markdown(
     """
     <div style="text-align: center;">
@@ -48,15 +41,21 @@ pdas = st.multiselect("Filtrar por área temática (PDA):",
 # Dados filtrados
 df_filtrado = df[df["Cidade"].isin(cidades) & df["PDA"].isin(pdas)]
 
-# Organiza em abas
-tab1, tab2, tab3 = st.tabs(
-    ["📊 Gráfico por PDA", "🏙️ Gráfico por Cidade", "📋 Dados Completos"])
+# Aba
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+    "📊 Gráfico por PDA",
+    "🏙️ Gráfico por Cidade",
+    "📋 Dados Completos",
+    "🧭 Problemas por Cidade e Área",
+    "📌 Problemas Mais Recorrentes",
+    "📥 Download"
+])
 
+# --- ABA 1: Gráfico por PDA ---
 with tab1:
     st.subheader("📊 Total de Solicitações por PDA")
     grafico_pda = df_filtrado.groupby("PDA", as_index=False)[
-        "Solicitações"].sum()
-    grafico_pda = grafico_pda.sort_values("Solicitações", ascending=False)
+        "Solicitações"].sum().sort_values("Solicitações", ascending=False)
     fig1 = px.bar(grafico_pda, x="PDA", y="Solicitações",
                   color_discrete_sequence=["#636EFA"])
     st.plotly_chart(fig1, use_container_width=True)
@@ -73,12 +72,11 @@ with tab1:
     )
     st.plotly_chart(fig_donut, use_container_width=True)
 
+# --- ABA 2: Gráfico por Cidade ---
 with tab2:
     st.subheader("🏙️ Total de Solicitações por Cidade")
     grafico_cidade = df_filtrado.groupby("Cidade", as_index=False)[
-        "Solicitações"].sum()
-    grafico_cidade = grafico_cidade.sort_values(
-        "Solicitações", ascending=False)
+        "Solicitações"].sum().sort_values("Solicitações", ascending=False)
     fig2 = px.bar(grafico_cidade, x="Cidade", y="Solicitações",
                   color_discrete_sequence=["#636EFA"])
     st.plotly_chart(fig2, use_container_width=True)
@@ -95,6 +93,83 @@ with tab2:
     )
     st.plotly_chart(fig_donut_cidade, use_container_width=True)
 
+# --- ABA 3: Tabela de dados ---
 with tab3:
     st.subheader("📋 Tabela de Dados Filtrados")
     st.dataframe(df_filtrado, use_container_width=True)
+
+# --- PROBLEMAS MANUAIS POR CIDADE/PDA ---
+problemas = [
+    {"Cidade": "Patos", "PDA": "Gestão de Pessoas",
+        "Problema": "Efetivo escasso, insatisfação com salários, falta de motivação, ausência de capacitação"},
+    {"Cidade": "Patos", "PDA": "Engenharia",
+        "Problema": "Alojamento precário, sede sem estrutura, infiltrações, instalações elétricas ruins, sem espaço para práticas esportivas"},
+    {"Cidade": "Patos", "PDA": "Tecnologia da Informação",
+        "Problema": "Necessidade de novos computadores e impressoras, novos recursos tecnológicos para maximizar a produtividade"},
+    {"Cidade": "Patos", "PDA": "Saúde",
+        "Problema": "Ampliação dos serviços de saúde para o PM e sua família, serviço de acolhimento psicoterapêutico"},
+    {"Cidade": "Patos", "PDA": "Materiais e Patrimônio",
+        "Problema": "Falta de mobiliário adequado e manutenção predial"},
+
+    {"Cidade": "Campina Grande", "PDA": "Gestão de Pessoas",
+        "Problema": "Baixo salário, sobrecarga de trabalho, idade avançada dos efetivos"},
+    {"Cidade": "Campina Grande", "PDA": "Engenharia",
+        "Problema": "Necessidade de construção de unidade, infiltrações, manutenção predial"},
+    {"Cidade": "Campina Grande", "PDA": "Tecnologia da Informação",
+        "Problema": "Equipamentos obsoletos e falta de TI"},
+    {"Cidade": "Campina Grande", "PDA": "Saúde",
+        "Problema": "Falta de estrutura adequada para atendimento médico"},
+    {"Cidade": "Campina Grande", "PDA": "Materiais e Patrimônio",
+        "Problema": "Defasagem no controle de patrimônio e estoque"},
+
+    {"Cidade": "João Pessoa", "PDA": "Gestão de Pessoas",
+        "Problema": "Déficit de efetivo, redistribuição necessária, ausência de incentivo"},
+    {"Cidade": "João Pessoa", "PDA": "Engenharia",
+        "Problema": "Reformas urgentes, infiltrações, construção de alojamento e presídio"},
+    {"Cidade": "João Pessoa", "PDA": "Tecnologia da Informação",
+        "Problema": "Falta de suporte técnico e equipamentos desatualizados"},
+    {"Cidade": "João Pessoa", "PDA": "Processos e Normas",
+        "Problema": "Necessidade de atualização e padronização de normas internas"},
+    {"Cidade": "João Pessoa", "PDA": "Materiais e Patrimônio",
+        "Problema": "Infraestrutura inadequada e controle patrimonial falho"},
+
+    {"Cidade": "Guarabira", "PDA": "Gestão de Pessoas",
+        "Problema": "Falta de efetivo, ausência de plano de carreira e motivação baixa"},
+    {"Cidade": "Guarabira", "PDA": "Engenharia",
+        "Problema": "Falta de manutenção predial, infiltrações, sede com problemas estruturais"},
+    {"Cidade": "Guarabira", "PDA": "Tecnologia da Informação",
+        "Problema": "Carência de computadores e rede instável"},
+    {"Cidade": "Guarabira", "PDA": "Processos e Normas",
+        "Problema": "Desorganização documental e ausência de fluxos claros"},
+    {"Cidade": "Guarabira", "PDA": "Materiais e Patrimônio",
+        "Problema": "Móveis deteriorados, controle ineficaz de estoque"},
+]
+
+df_problemas = pd.DataFrame(problemas)
+
+# --- ABA 4: Problemas por Cidade e Área ---
+with tab4:
+    st.subheader("🧭 Problemas por Cidade e Área")
+    cidades_prob = st.multiselect("Filtrar cidade:", df_problemas["Cidade"].unique(
+    ), default=df_problemas["Cidade"].unique())
+    pdas_prob = st.multiselect("Filtrar PDA:", df_problemas["PDA"].unique(
+    ), default=df_problemas["PDA"].unique())
+    df_prob_filtrado = df_problemas[df_problemas["Cidade"].isin(
+        cidades_prob) & df_problemas["PDA"].isin(pdas_prob)]
+    st.dataframe(df_prob_filtrado, use_container_width=True)
+
+# --- ABA 5: Problemas Mais Recorrentes ---
+with tab5:
+    st.subheader("📌 Problemas Mais Recorrentes")
+    todas = df_problemas["Problema"].str.lower().str.split(", ")
+    plano = pd.Series([item for sublist in todas for item in sublist])
+    top = plano.value_counts().reset_index()
+    top.columns = ["Problema recorrente", "Ocorrências"]
+    st.dataframe(top, use_container_width=True)
+
+# --- ABA 6: Download CSV filtrado ---
+with tab6:
+    st.subheader("📥 Baixar os dados filtrados")
+    csv = df_filtrado.to_csv(index=False).encode('utf-8')
+    st.download_button("📥 Clique para baixar", csv,
+                       "dados_filtrados.csv", "text/csv")
