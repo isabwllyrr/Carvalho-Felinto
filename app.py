@@ -150,13 +150,21 @@ df_problemas = pd.DataFrame(problemas)
 # --- ABA 4: Problemas por Cidade e Área ---
 with tab4:
     st.subheader("🧭 Problemas por Cidade e Área")
-    cidades_prob = st.multiselect("Filtrar cidade:", df_problemas["Cidade"].unique(
-    ), default=df_problemas["Cidade"].unique())
-    pdas_prob = st.multiselect("Filtrar PDA:", df_problemas["PDA"].unique(
-    ), default=df_problemas["PDA"].unique())
-    df_prob_filtrado = df_problemas[df_problemas["Cidade"].isin(
-        cidades_prob) & df_problemas["PDA"].isin(pdas_prob)]
-    st.dataframe(df_prob_filtrado, use_container_width=True)
+
+    with st.container(border=True):
+        st.markdown("### 🎯 Filtros")
+        cidades_prob = st.multiselect("Selecione a cidade:", df_problemas["Cidade"].unique(
+        ), default=df_problemas["Cidade"].unique())
+        pdas_prob = st.multiselect("Selecione a área temática (PDA):", df_problemas["PDA"].unique(
+        ), default=df_problemas["PDA"].unique())
+
+        df_prob_filtrado = df_problemas[df_problemas["Cidade"].isin(
+            cidades_prob) & df_problemas["PDA"].isin(pdas_prob)]
+
+    with st.container(border=True):
+        st.markdown("### 📋 Tabela de Problemas")
+        st.data_editor(df_prob_filtrado, use_container_width=True,
+                       disabled=True, height=400)
 
 # --- ABA 5: Problemas Mais Recorrentes ---
 with tab5:
