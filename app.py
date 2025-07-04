@@ -27,7 +27,7 @@ def top_n_com_others(df, coluna, valor, n=5):
 # Logo carvalho e felinto + PM
 col1, col2 = st.columns(2)
 with col1:
-    st.image("logo_esquerda_.png", width=200)
+    st.image("logo_esquerda_.png", width=250)
 with col2:
     st.image("logo_direita_.png", width=150)
 
