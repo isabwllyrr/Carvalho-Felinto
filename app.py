@@ -53,14 +53,12 @@ df_coords = pd.DataFrame(coordenadas)
 df_filtrado = df_filtrado.merge(df_coords, on='Cidade', how='left')
 
 # Aba
-tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
+tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "📊 Gráfico por PDA",
     "🏙️ Gráfico por Cidade",
-    "📋 Dados Completos",
-    "🧭 Problemas por Cidade e Área",
     "📌 Problemas Mais Recorrentes",
-    "📥 Download",
-    "🗺️ Mapa das Solicitações"
+    "🗺️ Mapa das Solicitações",
+    "📥 Download"
 ])
 
 # --- ABA 1: Gráfico por PDA ---
@@ -104,11 +102,6 @@ with tab2:
         color_discrete_sequence=px.colors.qualitative.Pastel
     )
     st.plotly_chart(fig_donut_cidade, use_container_width=True)
-
-# --- ABA 3: Tabela de dados ---
-with tab3:
-    st.subheader("📋 Tabela de Dados Filtrados")
-    st.dataframe(df_filtrado, use_container_width=True)
 
 # --- PROBLEMAS MANUAIS POR CIDADE/PDA ---
 problemas = [
@@ -163,34 +156,8 @@ problemas = [
 
 df_problemas = pd.DataFrame(problemas)
 
-# --- ABA 4: Problemas por Cidade e Área ---
-with tab4:
-    st.subheader("🧭 Problemas por Cidade e Área")
-
-    # Agrupar por cidade e mostrar os PDAs como caixas separadas
-    cidades_unicas = df_problemas["Cidade"].unique()
-
-    for cidade in cidades_unicas:
-        st.markdown(f"## 📍 {cidade}")
-
-        df_cidade = df_problemas[df_problemas["Cidade"] == cidade]
-
-        for _, row in df_cidade.iterrows():
-            st.markdown(f"""
-                <div style="
-                    background-color: #f9f9f9;
-                    padding: 16px;
-                    margin-bottom: 10px;
-                    border-radius: 10px;
-                    border-left: 6px solid #636EFA;
-                ">
-                    <h4 style="margin: 0; color: #333;">🔹 {row['PDA']}</h4>
-                    <p style="margin: 8px 0 0; color: #555;">{row['Problema']}</p>
-                </div>
-            """, unsafe_allow_html=True)
-
-# --- ABA 5: Problemas Mais Recorrentes ---
-with tab5:
+# --- ABA 3: Problemas Mais Recorrentes ---
+with tab3:
     st.subheader("📌 Problemas Mais Recorrentes (Top 10)")
 
     # Extrai os 10 problemas mais frequentes
@@ -227,14 +194,14 @@ with tab5:
 
     st.plotly_chart(fig_top10, use_container_width=True)
 
-# --- ABA 6: Download CSV filtrado ---
-with tab6:
+# --- ABA 5: Download CSV filtrado ---
+with tab5:
     st.subheader("📥 Baixar os dados filtrados")
     csv = df_filtrado.to_csv(index=False).encode('utf-8')
     st.download_button("📥 Clique para baixar", csv,
                        "dados_filtrados.csv", "text/csv")
 
-with tab7:
+with tab4:
     st.subheader("🗺️ Mapa das Solicitações por Cidade")
 
     dados_mapa = df_filtrado.groupby(
