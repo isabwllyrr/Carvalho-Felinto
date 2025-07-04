@@ -193,35 +193,39 @@ with tab4:
 with tab5:
     st.subheader("📌 Problemas Mais Recorrentes (Top 10)")
 
-    # Dividir os problemas em frases separadas
+    # Extrai os 10 problemas mais frequentes
     todas = df_problemas["Problema"].str.lower().str.split(", ")
     plano = pd.Series([item.strip() for sublist in todas for item in sublist])
     top = plano.value_counts().reset_index().head(10)
     top.columns = ["Problema recorrente", "Ocorrências"]
 
-    # Resumo manual ou automático dos problemas
-    top["Resumo"] = top["Problema recorrente"].str.slice(0, 40) + "..."
-
-    # Gráfico de barras horizontais sem valores
+    # Gráfico de barras horizontais com estilo limpo
     fig_top10 = px.bar(
         top,
         x="Ocorrências",
-        y="Resumo",
+        y="Problema recorrente",
         orientation='h',
         color_discrete_sequence=["#636EFA"]
     )
 
     fig_top10.update_layout(
-        xaxis_title="",
-        yaxis_title="",
+        xaxis_title="",  # Sem título no eixo X
+        yaxis_title="",  # Sem título no eixo Y
         showlegend=False,
-        yaxis=dict(autorange="reversed")  # Deixa o maior no topo
+        height=600,
+        margin=dict(l=20, r=20, t=30, b=20),
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font=dict(size=14)
     )
 
-    fig_top10.update_traces(textposition="none")
+    fig_top10.update_traces(
+        text=None,
+        marker_line_width=1.5,
+        marker_line_color='white'
+    )
 
     st.plotly_chart(fig_top10, use_container_width=True)
-
 
 # --- ABA 6: Download CSV filtrado ---
 with tab6:
