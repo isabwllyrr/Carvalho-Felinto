@@ -23,10 +23,10 @@ def top_n_com_others(df, coluna, valor, n=5):
 col1, col2 = st.columns(2)
 
 with col1:
-    st.image("logo_esquerda.png", width=250)
+    st.image("logo_direita_.png", width=200)
 
 with col2:
-    st.image("logo_direita.png", width=250)
+    st.image("logo_esquerda_.png", width=200)
 
 st.title("📊 Painel Interativo - Solicitações de PDAs por Cidade e Área")
 
