@@ -194,12 +194,9 @@ with tab6:
     st.download_button("📥 Clique para baixar", csv,
                        "dados_filtrados.csv", "text/csv")
 
-st.subheader("🗺️ Mapa das Solicitações por Cidade")
-
 with tab7:
     st.subheader("🗺️ Mapa das Solicitações por Cidade")
 
-    # Agrupa para evitar duplicados e soma solicitações
     dados_mapa = df_filtrado.groupby(
         ["Cidade", "Latitude", "Longitude"], as_index=False)["Solicitações"].sum()
 
