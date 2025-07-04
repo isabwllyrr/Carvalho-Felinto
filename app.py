@@ -11,15 +11,16 @@ df = pd.read_csv("solicitacoes_pda_consolidadas.csv")
 def top_n_com_others(df, coluna, valor, n=5):
     df_agg = df.groupby(coluna, as_index=False)[
         valor].sum().sort_values(valor, ascending=False)
-    top_n = df_agg.head(n)
-    outros = df_agg.iloc[n:]
-    outros_sum = outros[valor].sum()
 
-    if outros_sum > 0:
+    # Se houver mais que N categorias, inclui 'Outros'
+    if len(df_agg) > n:
+        top_n = df_agg.head(n)
+        outros = df_agg.iloc[n:]
+        outros_sum = outros[valor].sum()
         df_final = pd.concat([top_n, pd.DataFrame(
             {coluna: ['Outros'], valor: [outros_sum]})], ignore_index=True)
     else:
-        df_final = top_n
+        df_final = df_agg  # só retorna o que tem
 
     return df_final
 
