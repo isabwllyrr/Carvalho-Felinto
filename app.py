@@ -2,12 +2,19 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+# Caminho para o arquivo de dados
+CAMINHO_DADOS = "solicitacoes_pda_consolidadas.csv"
+
+# Verifica se o arquivo existe antes de carregar
+if not os.path.exists(CAMINHO_DADOS):
+    st.error("❌ O arquivo não foi encontrado.\n\n"
+             "💡 Certifique-se de que ele esteja na mesma pasta do app ou envie manualmente no Streamlit Cloud.")
+    st.stop()
+
 # Carrega os dados principais
-df = pd.read_csv("solicitacoes_pda_consolidadas.csv")
+df = pd.read_csv(CAMINHO_DADOS)
 
 # Função para Top N + "Outros"
-
-
 def top_n_com_others(df, coluna, valor, n=5):
     df_agg = df.groupby(coluna, as_index=False)[
         valor].sum().sort_values(valor, ascending=False)
