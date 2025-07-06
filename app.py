@@ -173,3 +173,4 @@ with tab5:
     csv = df_filtrado.to_csv(index=False).encode('utf-8')
     st.download_button("🗕️ Clique para baixar", csv,
                        "dados_filtrados.csv", "text/csv")
+# Alteração teste 06/07/2025
