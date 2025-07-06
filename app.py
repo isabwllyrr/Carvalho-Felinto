@@ -30,16 +30,13 @@ def top_n_com_others(df, coluna, valor, n=5):
 
     return df_final
 
+# logos 
+col1, col2, col3 = st.columns([2, 4, 2])  # margem - conteúdo - margem centralizado
 
-st.markdown(
-    """
-    <div style='display: flex; justify-content: center; align-items: center; gap: 40px; margin-bottom: 20px;'>
-        <img src='logo_esquerda_.png' width='250'/>
-        <img src='logo_direita_.png' width='150'/>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+with col2:
+    st.image("logo_esquerda_.png", width=250)
+    st.image("logo_direita_.png", width=150)
+
 st.title("📊 Painel Interativo - Solicitações de PDAs por Cidade e Área")
 
 # Filtros
