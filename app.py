@@ -118,7 +118,7 @@ with tab2:
         plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
     fig_donut_cidade.update_traces(textposition='outside')  # texto do gráfico pizza do lado de fora
     st.plotly_chart(fig_donut_cidade, use_container_width=True)
-    
+
 # --- ABA 3: Problemas Mais Recorrentes ---
 with tab3:
     st.subheader("📌 Problemas Mais Recorrentes (Top 10)")
@@ -177,6 +177,7 @@ with tab4:
     st.subheader("🗸️ Mapa das Solicitações por Cidade")
     dados_mapa = df_filtrado.groupby(
         ["Cidade", "Latitude", "Longitude"], as_index=False)["Solicitações"].sum()
+    
     fig_mapa = px.scatter_mapbox(
         dados_mapa,
         lat="Latitude",
@@ -193,9 +194,27 @@ with tab4:
     fig_mapa.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
     st.plotly_chart(fig_mapa, use_container_width=True)
 
+    # texto explicativo com destaque para Patos
+    st.markdown("""
+    <div style='padding: 10px; background-color: #F5F5F5; border-radius: 10px; font-size: 16px'>
+        O mapa acima ilustra a distribuição geográfica das <b>solicitações por cidade</b>, onde o tamanho dos círculos representa o volume de registros em cada localidade.
+        <br><br>
+        <b>Patos</b> se destaca como o município com o maior número de solicitações (<b>89 no total</b>), evidenciando uma demanda significativamente maior em relação às demais cidades.
+        <br><br>
+        Veja abaixo os números por cidade:
+        <ul>
+            <li><b>Patos:</b> 89 solicitações</li>
+            <li><b>Campina Grande:</b> 74 solicitações</li>
+            <li><b>João Pessoa:</b> 40 solicitações</li>
+            <li><b>Guarabira:</b> 34 solicitações</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+
 # --- ABA 5 ---
 with tab5:
     st.subheader("🗕️ Baixar os dados filtrados")
     csv = df_filtrado.to_csv(index=False).encode('utf-8')
     st.download_button("🗕️ Clique para baixar", csv,
                        "dados_filtrados.csv", "text/csv")
+
