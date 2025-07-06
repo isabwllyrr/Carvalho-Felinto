@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+# deixando no modo horizontal
+st.set_page_config(layout="wide")
+
 uploaded_file = st.file_uploader("📂 Faça upload do arquivo de dados (.csv)", type=["csv"])
 
 if uploaded_file is not None:
@@ -28,13 +31,15 @@ def top_n_com_others(df, coluna, valor, n=5):
     return df_final
 
 
-# Logo carvalho e felinto + PM
-col1, col2 = st.columns(2)
-with col1:
-    st.image("logo_esquerda_.png", width=250)
-with col2:
-    st.image("logo_direita_.png", width=150)
-
+st.markdown(
+    """
+    <div style='display: flex; justify-content: center; align-items: center; gap: 40px; margin-bottom: 20px;'>
+        <img src='logo_esquerda_.png' width='250'/>
+        <img src='logo_direita_.png' width='150'/>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 st.title("📊 Painel Interativo - Solicitações de PDAs por Cidade e Área")
 
 # Filtros
@@ -217,4 +222,5 @@ with tab5:
     csv = df_filtrado.to_csv(index=False).encode('utf-8')
     st.download_button("🗕️ Clique para baixar", csv,
                        "dados_filtrados.csv", "text/csv")
+
 
