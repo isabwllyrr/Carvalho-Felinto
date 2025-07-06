@@ -68,8 +68,16 @@ with tab1:
     st.subheader("📊 Total de Solicitações por PDA")
     grafico_pda = df_filtrado.groupby("PDA", as_index=False)[
         "Solicitações"].sum().sort_values("Solicitações", ascending=False)
+
+    # calcula percentual para texto formatado
+    total_pda = grafico_pda["Solicitações"].sum()
+    grafico_pda["Percentual"] = grafico_pda["Solicitações"] / total_pda * 100
+    texto_pda = [f"{v:,}".replace(',', '.') + f" ({p:.1f}%)".replace('.', ',') for v, p in zip(grafico_pda["Solicitações"], grafico_pda["Percentual"])]
+
     fig1 = px.bar(grafico_pda, x="PDA", y="Solicitações",
-                  color_discrete_sequence=["#1F4E79"])
+                  color_discrete_sequence=["#1F4E79"],
+                  text=texto_pda)
+    fig1.update_traces(textposition='outside')
     fig1.update_layout(plot_bgcolor='rgba(0,0,0,0)',
                        paper_bgcolor='rgba(0,0,0,0)', showlegend=False)
     st.plotly_chart(fig1, use_container_width=True)
@@ -88,8 +96,15 @@ with tab2:
     st.subheader("🌇️ Total de Solicitações por Cidade")
     grafico_cidade = df_filtrado.groupby("Cidade", as_index=False)[
         "Solicitações"].sum().sort_values("Solicitações", ascending=False)
+
+    total_cidade = grafico_cidade["Solicitações"].sum()
+    grafico_cidade["Percentual"] = grafico_cidade["Solicitações"] / total_cidade * 100
+    texto_cidade = [f"{v:,}".replace(',', '.') + f" ({p:.1f}%)".replace('.', ',') for v, p in zip(grafico_cidade["Solicitações"], grafico_cidade["Percentual"])]
+
     fig2 = px.bar(grafico_cidade, x="Cidade", y="Solicitações",
-                  color_discrete_sequence=["#1F4E79"])
+                  color_discrete_sequence=["#1F4E79"],
+                  text=texto_cidade)
+    fig2.update_traces(textposition='outside')
     fig2.update_layout(plot_bgcolor='rgba(0,0,0,0)',
                        paper_bgcolor='rgba(0,0,0,0)', showlegend=False)
     st.plotly_chart(fig2, use_container_width=True)
@@ -123,13 +138,20 @@ with tab3:
 
     df_top10 = pd.DataFrame(problemas_top10)
 
+    total = df_top10["Ocorrências"].sum()
+    df_top10["Percentual"] = df_top10["Ocorrências"] / total * 100
+    texto_top10 = [f"{v} ({p:.1f}%)".replace('.', ',') for v, p in zip(df_top10["Ocorrências"], df_top10["Percentual"])]
+
     fig_top10 = px.bar(
         df_top10,
         x="Ocorrências",
         y="Problema",
         orientation='h',
-        color_discrete_sequence=["#1F4E79"],  # azul escuro neutro
+        color_discrete_sequence=["#1F4E79"],
+        text=texto_top10
     )
+
+    fig_top10.update_traces(textposition='outside')
 
     fig_top10.update_layout(
         plot_bgcolor='rgba(0,0,0,0)',
@@ -149,6 +171,7 @@ with tab3:
         Esses indicadores podem auxiliar na <b>priorização de investimentos e políticas públicas</b> mais eficientes, voltadas para as reais demandas operacionais.
     </div>
     """, unsafe_allow_html=True)
+
 # --- ABA 4 ---
 with tab4:
     st.subheader("🗸️ Mapa das Solicitações por Cidade")
@@ -176,4 +199,3 @@ with tab5:
     csv = df_filtrado.to_csv(index=False).encode('utf-8')
     st.download_button("🗕️ Clique para baixar", csv,
                        "dados_filtrados.csv", "text/csv")
-# Alteração teste 06/07/2025
