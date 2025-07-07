@@ -87,7 +87,7 @@ with tab1:
         textposition='outside',
         textfont=dict(
             color='black',
-            size=15,  # aumenta o tamanho
+            size=14.5,  # aumenta o tamanho
             family='sans-serif'  # negrito
         )
     )
