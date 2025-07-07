@@ -87,8 +87,8 @@ with tab1:
         textposition='outside',
         textfont=dict(
             color='black',
-            size=14.5,  # aumenta o tamanho
-            family='sans-serif'  # negrito
+            size=14,  # aumenta o tamanho
+            family='sans-serif'  # simula negrito
         )
     )
     fig1.update_layout(
@@ -101,6 +101,7 @@ with tab1:
     )
 
     st.plotly_chart(fig1, use_container_width=True)
+
 
 # --- ABA 2 ---
 with tab2:
