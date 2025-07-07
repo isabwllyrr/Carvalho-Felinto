@@ -77,14 +77,27 @@ with tab1:
     grafico_pda["Percentual"] = grafico_pda["Solicitações"] / total_pda * 100
     texto_pda = [f"{v:,}".replace(',', '.') + f" ({p:.1f}%)".replace('.', ',') for v, p in zip(grafico_pda["Solicitações"], grafico_pda["Percentual"])]
 
-    fig1 = px.bar(grafico_pda, x="PDA", y="Solicitações",
-                  color_discrete_sequence=["#1F4E79"],
-                  text=texto_pda)
-    fig1.update_traces(textposition='outside')
-    fig1.update_layout(plot_bgcolor='rgba(0,0,0,0)',
-                       paper_bgcolor='rgba(0,0,0,0)', showlegend=False)
-    st.plotly_chart(fig1, use_container_width=True)
+    fig1 = px.bar(
+        grafico_pda,
+        x="PDA",
+        y="Solicitações",
+        color_discrete_sequence=["#1F4E79"],
+        text=texto_pda
+    )
+    fig1.update_traces(
+        textposition='outside',
+        textfont=dict(color='black')  # deixa o texto dos rótulos em preto
+    )
+    fig1.update_layout(
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        showlegend=False,
+        font=dict(color='black'),
+        xaxis=dict(showgrid=False),
+        yaxis=dict(showgrid=False)
+    )
 
+    st.plotly_chart(fig1, use_container_width=True)
     # Definindo top5 antes do gráfico pizza
     grafico_pda_top5 = top_n_com_others(
         df_filtrado, "PDA", "Solicitações", n=5)
