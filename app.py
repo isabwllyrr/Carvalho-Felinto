@@ -66,41 +66,33 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "🗸️ Mapa das Solicitações",
     "🗕️ Download"
 ])
-
 with tab1:
     st.subheader("📊 Total de Solicitações por PDA")
     grafico_pda = df_filtrado.groupby("PDA", as_index=False)[
         "Solicitações"].sum().sort_values("Solicitações", ascending=False)
 
+    # calcula percentual para texto formatado
     total_pda = grafico_pda["Solicitações"].sum()
     grafico_pda["Percentual"] = grafico_pda["Solicitações"] / total_pda * 100
     texto_pda = [f"{v:,}".replace(',', '.') + f" ({p:.1f}%)".replace('.', ',') for v, p in zip(grafico_pda["Solicitações"], grafico_pda["Percentual"])]
 
-    fig1 = px.bar(
-        grafico_pda,
-        x="PDA",
-        y="Solicitações",
-        color_discrete_sequence=["#1F4E79"],
-        text=texto_pda
-    )
-    fig1.update_traces(
-        textposition='outside',
-        textfont=dict(
-            color='black',
-            size=14,  # aumenta o tamanho
-            family='sans-serif'  # simula negrito
-        )
-    )
-    fig1.update_layout(
-        plot_bgcolor='rgba(0,0,0,0)',
-        paper_bgcolor='rgba(0,0,0,0)',
-        showlegend=False,
-        font=dict(color='black'),
-        xaxis=dict(showgrid=False),
-        yaxis=dict(showgrid=False)
-    )
-
+    fig1 = px.bar(grafico_pda, x="PDA", y="Solicitações",
+                  color_discrete_sequence=["#1F4E79"],
+                  text=texto_pda)
+    fig1.update_traces(textposition='outside')
+    fig1.update_layout(plot_bgcolor='rgba(0,0,0,0)',
+                       paper_bgcolor='rgba(0,0,0,0)', showlegend=False)
     st.plotly_chart(fig1, use_container_width=True)
+
+    # Definindo top5 antes do gráfico pizza
+    grafico_pda_top5 = top_n_com_others(
+        df_filtrado, "PDA", "Solicitações", n=5)
+
+    fig_donut = px.pie(grafico_pda_top5, values='Solicitações', names='PDA', hole=0.5,
+                       color_discrete_sequence=["#A0A0A0", "#555555", "#1F4E79", "#7B8DAB", "#B0BEC5"])
+    fig_donut.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+    fig_donut.update_traces(textposition='outside')  # texto da pizza do lado de fora
+    st.plotly_chart(fig_donut, use_container_width=True)
 
 
 # --- ABA 2 ---
