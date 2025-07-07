@@ -18,7 +18,6 @@ def top_n_com_others(df, coluna, valor, n=5):
     df_agg = df.groupby(coluna, as_index=False)[
         valor].sum().sort_values(valor, ascending=False)
 
-    # Se houver mais que N categorias, inclui 'Outros'
     if len(df_agg) > n:
         top_n = df_agg.head(n)
         outros = df_agg.iloc[n:]
@@ -26,11 +25,11 @@ def top_n_com_others(df, coluna, valor, n=5):
         df_final = pd.concat([top_n, pd.DataFrame(
             {coluna: ['Outros'], valor: [outros_sum]})], ignore_index=True)
     else:
-        df_final = df_agg  # só retorna o que tem
+        df_final = df_agg
 
     return df_final
 
-#logos
+# Logos
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     col_logo1, col_logo2 = st.columns(2)
@@ -42,15 +41,11 @@ with col2:
 st.title("📊 Painel Interativo - Solicitações de PDAs por Cidade e Área")
 
 # Filtros
-cidades = st.multiselect("Filtrar por cidade:",
-                         df["Cidade"].unique(), default=df["Cidade"].unique())
-pdas = st.multiselect("Filtrar por área temática (PDA):",
-                      df["PDA"].unique(), default=df["PDA"].unique())
+cidades = st.multiselect("Filtrar por cidade:", df["Cidade"].unique(), default=df["Cidade"].unique())
+pdas = st.multiselect("Filtrar por área temática (PDA):", df["PDA"].unique(), default=df["PDA"].unique())
 
-# Dados filtrados
 df_filtrado = df[df["Cidade"].isin(cidades) & df["PDA"].isin(pdas)]
 
-# Coordenadas manuais
 df_coords = pd.DataFrame({
     'Cidade': ['Patos', 'Campina Grande', 'João Pessoa', 'Guarabira'],
     'Latitude': [-7.0172, -7.2306, -7.1195, -6.8506],
@@ -58,7 +53,6 @@ df_coords = pd.DataFrame({
 })
 df_filtrado = df_filtrado.merge(df_coords, on='Cidade', how='left')
 
-# Abas de navegação
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "📊 Gráfico por PDA",
     "🌇️ Gráfico por Cidade",
@@ -66,12 +60,13 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "🗸️ Mapa das Solicitações",
     "🗕️ Download"
 ])
+
+# --- TAB 1 ---
 with tab1:
     st.subheader("📊 Total de Solicitações por PDA")
     grafico_pda = df_filtrado.groupby("PDA", as_index=False)[
         "Solicitações"].sum().sort_values("Solicitações", ascending=False)
 
-    # calcula percentual para texto formatado
     total_pda = grafico_pda["Solicitações"].sum()
     grafico_pda["Percentual"] = grafico_pda["Solicitações"] / total_pda * 100
     texto_pda = [f"{v:,}".replace(',', '.') + f" ({p:.1f}%)".replace('.', ',') for v, p in zip(grafico_pda["Solicitações"], grafico_pda["Percentual"])]
@@ -79,23 +74,37 @@ with tab1:
     fig1 = px.bar(grafico_pda, x="PDA", y="Solicitações",
                   color_discrete_sequence=["#1F4E79"],
                   text=texto_pda)
-    fig1.update_traces(textposition='outside')
-    fig1.update_layout(plot_bgcolor='rgba(0,0,0,0)',
-                       paper_bgcolor='rgba(0,0,0,0)', showlegend=False)
+    fig1.update_traces(
+        textposition='outside',
+        textfont=dict(color='black', size=14, family='Arial Black')
+    )
+    fig1.update_layout(
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        showlegend=False,
+        font=dict(color='black'),
+        xaxis=dict(showgrid=False),
+        yaxis=dict(showgrid=False)
+    )
     st.plotly_chart(fig1, use_container_width=True)
 
-    # Definindo top5 antes do gráfico pizza
-    grafico_pda_top5 = top_n_com_others(
-        df_filtrado, "PDA", "Solicitações", n=5)
+    grafico_pda_top5 = top_n_com_others(df_filtrado, "PDA", "Solicitações", n=5)
 
     fig_donut = px.pie(grafico_pda_top5, values='Solicitações', names='PDA', hole=0.5,
                        color_discrete_sequence=["#A0A0A0", "#555555", "#1F4E79", "#7B8DAB", "#B0BEC5"])
-    fig_donut.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
-    fig_donut.update_traces(textposition='outside')  # texto da pizza do lado de fora
+    fig_donut.update_traces(
+        textposition='outside',
+        textfont=dict(color='black', size=14, family='Arial Black')
+    )
+    fig_donut.update_layout(
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font=dict(color='black'),
+        showlegend=True
+    )
     st.plotly_chart(fig_donut, use_container_width=True)
 
-
-# --- ABA 2 ---
+# --- TAB 2 ---
 with tab2:
     st.subheader("🌇️ Total de Solicitações por Cidade")
     grafico_cidade = df_filtrado.groupby("Cidade", as_index=False)[
@@ -108,25 +117,39 @@ with tab2:
     fig2 = px.bar(grafico_cidade, x="Cidade", y="Solicitações",
                   color_discrete_sequence=["#1F4E79"],
                   text=texto_cidade)
-    fig2.update_traces(textposition='outside')
-    fig2.update_layout(plot_bgcolor='rgba(0,0,0,0)',
-                       paper_bgcolor='rgba(0,0,0,0)', showlegend=False)
+    fig2.update_traces(
+        textposition='outside',
+        textfont=dict(color='black', size=14, family='Arial Black')
+    )
+    fig2.update_layout(
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        showlegend=False,
+        font=dict(color='black'),
+        xaxis=dict(showgrid=False),
+        yaxis=dict(showgrid=False)
+    )
     st.plotly_chart(fig2, use_container_width=True)
 
-    grafico_cidade_top4 = top_n_com_others(
-        df_filtrado, "Cidade", "Solicitações", n=4)
+    grafico_cidade_top4 = top_n_com_others(df_filtrado, "Cidade", "Solicitações", n=4)
 
     fig_donut_cidade = px.pie(grafico_cidade_top4, values='Solicitações', names='Cidade', hole=0.5,
                               color_discrete_sequence=["#A0A0A0", "#555555", "#1F4E79", "#7B8DAB"])
+    fig_donut_cidade.update_traces(
+        textposition='outside',
+        textfont=dict(color='black', size=14, family='Arial Black')
+    )
     fig_donut_cidade.update_layout(
-        plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
-    fig_donut_cidade.update_traces(textposition='outside')  # texto do gráfico pizza do lado de fora
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font=dict(color='black'),
+        showlegend=True
+    )
     st.plotly_chart(fig_donut_cidade, use_container_width=True)
 
-# --- ABA 3: Problemas Mais Recorrentes ---
+# --- TAB 3 ---
 with tab3:
     st.subheader("📌 Problemas Mais Recorrentes (Top 10)")
-
     problemas_top10 = [
         {"Problema": "Baixo efetivo", "Ocorrências": 35},
         {"Problema": "Infraestrutura precária", "Ocorrências": 30},
@@ -139,7 +162,6 @@ with tab3:
         {"Problema": "Falta de espaço físico", "Ocorrências": 4},
         {"Problema": "Falta de padronização", "Ocorrências": 4},
     ]
-
     df_top10 = pd.DataFrame(problemas_top10)
 
     total = df_top10["Ocorrências"].sum()
@@ -154,16 +176,19 @@ with tab3:
         color_discrete_sequence=["#1F4E79"],
         text=texto_top10
     )
-
-    fig_top10.update_traces(textposition='outside')
-
+    fig_top10.update_traces(
+        textposition='outside',
+        textfont=dict(color='black', size=14, family='Arial Black')
+    )
     fig_top10.update_layout(
         plot_bgcolor='rgba(0,0,0,0)',
         paper_bgcolor='rgba(0,0,0,0)',
+        font=dict(color='black'),
+        xaxis=dict(showgrid=False),
+        yaxis=dict(showgrid=False),
         xaxis_title=None,
-        yaxis_title=None,
+        yaxis_title=None
     )
-
     st.plotly_chart(fig_top10, use_container_width=True)
 
     st.markdown("""
@@ -176,20 +201,18 @@ with tab3:
     </div>
     """, unsafe_allow_html=True)
 
-# --- ABA 4 ---
+# --- TAB 4 ---
 with tab4:
     st.subheader("🗸️ Mapa das Solicitações por Cidade")
-    dados_mapa = df_filtrado.groupby(
-        ["Cidade", "Latitude", "Longitude"], as_index=False)["Solicitações"].sum()
-    
+    dados_mapa = df_filtrado.groupby(["Cidade", "Latitude", "Longitude"], as_index=False)["Solicitações"].sum()
+
     fig_mapa = px.scatter_mapbox(
         dados_mapa,
         lat="Latitude",
         lon="Longitude",
         size="Solicitações",
         hover_name="Cidade",
-        hover_data={"Solicitações": True,
-                    "Latitude": False, "Longitude": False},
+        hover_data={"Solicitações": True, "Latitude": False, "Longitude": False},
         zoom=6,
         size_max=30,
         color_discrete_sequence=["#1F4E79"]
@@ -198,7 +221,6 @@ with tab4:
     fig_mapa.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
     st.plotly_chart(fig_mapa, use_container_width=True)
 
-    # texto explicativo com destaque para Patos
     st.markdown("""
     <div style='padding: 10px; background-color: #F5F5F5; border-radius: 10px; font-size: 16px'>
         O mapa acima ilustra a distribuição geográfica das <b>solicitações por cidade</b>, onde o tamanho dos círculos representa o volume de registros em cada localidade.
@@ -215,11 +237,8 @@ with tab4:
     </div>
     """, unsafe_allow_html=True)
 
-# --- ABA 5 ---
+# --- TAB 5 ---
 with tab5:
     st.subheader("🗕️ Baixar os dados filtrados")
     csv = df_filtrado.to_csv(index=False).encode('utf-8')
-    st.download_button("🗕️ Clique para baixar", csv,
-                       "dados_filtrados.csv", "text/csv")
-
-
+    st.download_button("🗕️ Clique para baixar", csv, "dados_filtrados.csv", "text/csv")
