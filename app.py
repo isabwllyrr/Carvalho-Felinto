@@ -5,7 +5,7 @@ from PIL import Image
 
 st.set_page_config(layout="wide")
 
-# Leitura dos dados
+# Leitura dos dados diretamente
 df = pd.read_csv("solicitacoes_pda_consolidadas.csv", encoding="utf-8")
 
 # Filtros
@@ -24,11 +24,9 @@ df_coords = pd.DataFrame({
 })
 df_filtrado = df_filtrado.merge(df_coords, on='Cidade', how='left')
 
-# Carrega as imagens
+# Logos centralizadas
 logo_esquerda = Image.open("logo_esquerda_.png")
 logo_direita = Image.open("logo_direita_.png")
-
-# Cria colunas proporcionais e centraliza as logos na coluna do meio
 col1, col2, col3 = st.columns([2, 1, 2])
 with col2:
     col_logo1, col_logo2 = st.columns([1, 1])
@@ -37,10 +35,9 @@ with col2:
     with col_logo2:
         st.image(logo_direita, width=180)
 
-# Título centralizado
+# Título
 st.markdown("<h2 style='text-align: center;'>Painel de Demandas Prioritárias - Cidades e PDAs</h2>",
             unsafe_allow_html=True)
-
 
 # Cartões
 total = df_filtrado["Solicitações"].sum()
@@ -70,7 +67,7 @@ with col_card3:
         </div>
     """, unsafe_allow_html=True)
 
-# Gráficos linha 1
+# Gráficos (linha 1)
 col1, col2 = st.columns(2)
 
 with col1:
@@ -78,31 +75,44 @@ with col1:
         "Solicitações"].sum().sort_values("Solicitações", ascending=False)
     total_pda = df_pda["Solicitações"].sum()
     df_pda["%"] = df_pda["Solicitações"] / total_pda * 100
-    df_pda["label"] = df_pda["%"].apply(lambda x: f"<b>{x:.1f}%</b>")
+    df_pda["Texto"] = df_pda.apply(
+        lambda row: f"{row['Solicitações']} ({row['%']:.1f}%)", axis=1)
 
-    fig_pda = px.bar(df_pda, x="PDA", y="Solicitações",
-                     text="label", color_discrete_sequence=["#1F4E79"])
-    fig_pda.update_traces(textposition='outside', textfont=dict(
-        size=16, color='black', family='Arial Black'))
-    fig_pda.update_layout(title="Solicitações por PDA",
-                          showlegend=False, margin=dict(t=40))
-    st.plotly_chart(fig_pda, use_container_width=True)
+    fig_bar_pda = px.bar(df_pda, x="PDA", y="Solicitações",
+                         text="Texto", color_discrete_sequence=["#1F4E79"])
+    fig_bar_pda.update_traces(textposition="outside", textfont=dict(
+        size=14, color="black"), cliponaxis=False)
+    fig_bar_pda.update_layout(title="Solicitações por PDA", showlegend=False,
+                              plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', margin=dict(t=40))
+    st.plotly_chart(fig_bar_pda, use_container_width=True)
 
 with col2:
     df_cidade = df_filtrado.groupby("Cidade", as_index=False)[
         "Solicitações"].sum()
     total_cidade = df_cidade["Solicitações"].sum()
     df_cidade["%"] = df_cidade["Solicitações"] / total_cidade * 100
+    texto_personalizado = df_cidade.apply(
+        lambda row: f"{row['Solicitações']} ({row['%']:.1f}%)", axis=1)
 
-    fig_cidade = px.pie(df_cidade, names="Cidade", values="Solicitações",
-                        hole=0.5,
-                        color_discrete_sequence=["#1F4E79", "#7B8DAB", "#A0A0A0", "#555555"])
-    fig_cidade.update_traces(textposition='outside', textfont=dict(
-        size=16, color="black", family="Arial Black"))
+    fig_cidade = px.pie(
+        df_cidade,
+        names="Cidade",
+        values="Solicitações",
+        hole=0.5,
+        color_discrete_sequence=["#1F4E79", "#7B8DAB", "#A0A0A0", "#555555"]
+    )
+    fig_cidade.update_traces(
+        text=df_cidade.apply(
+            lambda row: f"{row['Solicitações']} ({row['%']:.1f}%)", axis=1),
+        textposition='outside',
+        textfont=dict(size=16, color="black", family="Arial Black"),
+        textinfo="text"  # <- isso evita a repetição automática!
+    )
+
     fig_cidade.update_layout(title="Distribuição por Cidade")
     st.plotly_chart(fig_cidade, use_container_width=True)
 
-# Gráficos linha 2
+# Gráficos (linha 2)
 col3, col4 = st.columns(2)
 with col3:
     problemas_top10 = [
@@ -120,10 +130,11 @@ with col3:
     df_prob = pd.DataFrame(problemas_top10)
     total_prob = df_prob["Ocorrências"].sum()
     df_prob["%"] = df_prob["Ocorrências"] / total_prob * 100
-    df_prob["label"] = df_prob["%"].apply(lambda x: f"<b>{x:.1f}%</b>")
+    df_prob["Texto"] = df_prob.apply(
+        lambda row: f"{row['Ocorrências']} ({row['%']:.1f}%)", axis=1)
 
-    fig_prob = px.bar(df_prob, x="Ocorrências", y="Problema", orientation="h", text="label",
-                      color_discrete_sequence=["#1F4E79"])
+    fig_prob = px.bar(df_prob, x="Ocorrências", y="Problema",
+                      orientation="h", text="Texto", color_discrete_sequence=["#1F4E79"])
     fig_prob.update_traces(textposition='outside', textfont=dict(
         size=16, color="black", family='Arial Black'))
     fig_prob.update_layout(title="Top 10 Problemas", showlegend=False)
