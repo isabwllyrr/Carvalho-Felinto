@@ -80,18 +80,34 @@ with col1:
 
     fig_bar_pda = px.bar(df_pda, x="PDA", y="Solicitações",
                          text="Texto", color_discrete_sequence=["#1F4E79"])
-    fig_bar_pda.update_traces(textposition="outside", textfont=dict(
-        size=14, color="black"), cliponaxis=False)
-    fig_bar_pda.update_layout(title="Solicitações por PDA", showlegend=False,
-                              plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', margin=dict(t=40))
+    fig_bar_pda.update_traces(
+        textposition="outside",
+        textfont=dict(size=13, color="black", family="sans-serif"),
+        cliponaxis=False
+    )
+    fig_bar_pda.update_layout(
+        title="<b>Distribuição de Solicitações por PDA</b>",
+        title_font=dict(size=18),
+        showlegend=False,
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        margin=dict(t=40),
+        xaxis_title=None,
+        yaxis_title=None
+    )
     st.plotly_chart(fig_bar_pda, use_container_width=True)
+
 
 with col2:
     df_cidade = df_filtrado.groupby("Cidade", as_index=False)[
         "Solicitações"].sum()
+    df_cidade["Cidade"] = df_cidade["Cidade"].replace({
+        "João Pessoa": "JP",
+        "Campina Grande": "CG"
+    })
     total_cidade = df_cidade["Solicitações"].sum()
     df_cidade["%"] = df_cidade["Solicitações"] / total_cidade * 100
-    texto_personalizado = df_cidade.apply(
+    df_cidade["Texto"] = df_cidade.apply(
         lambda row: f"{row['Solicitações']} ({row['%']:.1f}%)", axis=1)
 
     fig_cidade = px.pie(
@@ -102,14 +118,18 @@ with col2:
         color_discrete_sequence=["#1F4E79", "#7B8DAB", "#A0A0A0", "#555555"]
     )
     fig_cidade.update_traces(
-        text=df_cidade.apply(
-            lambda row: f"{row['Solicitações']} ({row['%']:.1f}%)", axis=1),
+        text=df_cidade["Texto"],
         textposition='outside',
-        textfont=dict(size=16, color="black", family="Arial Black"),
-        textinfo="text"  # <- isso evita a repetição automática!
+        textfont=dict(size=13, color="black", family="sans-serif"),
+        textinfo="label+text"
     )
-
-    fig_cidade.update_layout(title="Distribuição por Cidade")
+    fig_cidade.update_layout(
+        title="<b>Distribuição por Cidade</b>",
+        title_font=dict(size=18),
+        showlegend=True,  # <- legenda aparece aqui!
+        legend_title_text='Cidade',
+        margin=dict(t=40)
+    )
     st.plotly_chart(fig_cidade, use_container_width=True)
 
 # Gráficos (linha 2)
@@ -133,12 +153,33 @@ with col3:
     df_prob["Texto"] = df_prob.apply(
         lambda row: f"{row['Ocorrências']} ({row['%']:.1f}%)", axis=1)
 
-    fig_prob = px.bar(df_prob, x="Ocorrências", y="Problema",
-                      orientation="h", text="Texto", color_discrete_sequence=["#1F4E79"])
-    fig_prob.update_traces(textposition='outside', textfont=dict(
-        size=16, color="black", family='Arial Black'))
-    fig_prob.update_layout(title="Top 10 Problemas", showlegend=False)
+    fig_prob = px.bar(
+        df_prob,
+        x="Ocorrências",
+        y="Problema",
+        orientation="h",
+        text="Texto",
+        color_discrete_sequence=["#1F4E79"]
+    )
+
+    fig_prob.update_traces(
+        textposition="outside",
+        textfont=dict(size=13, color="black", family="sans-serif"),
+        cliponaxis=False
+    )
+    fig_prob.update_layout(
+        title="<b>Top 10 Problemas</b>",
+        title_font=dict(size=18),
+        showlegend=False,
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        margin=dict(t=40),
+        xaxis_title=None,
+        yaxis_title=None
+    )
+
     st.plotly_chart(fig_prob, use_container_width=True)
+
 
 with col4:
     dados_mapa = df_filtrado.groupby(
